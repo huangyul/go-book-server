@@ -7,6 +7,8 @@ import (
 
 func main() {
 	server := gin.Default()
+
+	// 注册用户路由
 	user := web.NewUserHandler()
 	user.RegisterRoutes(server)
 

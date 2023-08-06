@@ -11,7 +11,8 @@ type UserHandler struct {
 }
 
 func NewUserHandler() *UserHandler {
-	const emailReg = ``
+	const emailReg = `/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/
+`
 	emailExp := regexp.MustCompile(emailReg, regexp.None)
 	return &UserHandler{
 		emailExp: emailExp,
@@ -52,6 +53,7 @@ func (u *UserHandler) SignUp(ctx *gin.Context) {
 	}
 	if !ok {
 		ctx.String(http.StatusOK, "邮箱格式不正确")
+		return
 	}
 
 	// 处理数据
