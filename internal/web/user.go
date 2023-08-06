@@ -11,8 +11,7 @@ type UserHandler struct {
 }
 
 func NewUserHandler() *UserHandler {
-	const emailReg = `/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/
-`
+	const emailReg = `^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$`
 	emailExp := regexp.MustCompile(emailReg, regexp.None)
 	return &UserHandler{
 		emailExp: emailExp,
