@@ -16,3 +16,5 @@
 
 使用alloworginfunc可以动态配置origin
 
+## gorm
+
