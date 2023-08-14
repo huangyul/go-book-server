@@ -17,5 +17,5 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 }
 
 func (usc *UserService) SignUp(ctx context.Context, user domain.User) error {
-	return nil
+	return usc.repo.Create(ctx, user)
 }

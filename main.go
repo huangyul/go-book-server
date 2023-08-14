@@ -25,6 +25,10 @@ func main() {
 	svc := service.NewUserService(repo)
 	user := web.NewUserHandler(svc)
 
+	err = dao.InitTable(db)
+	if err != nil {
+		return
+	}
 	// 解决跨域问题
 	server.Use(cors.New(cors.Config{
 		AllowCredentials: true, // 是否允许使用cookie

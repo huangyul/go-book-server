@@ -26,10 +26,9 @@ func (dao *UserDAO) Insert(ctx context.Context, u User) error {
 
 // User 数据库表结构
 type User struct {
-	Id       int64
-	Email    string
-	Password string
-
+	Id         int64  `gorm:"primaryKey,autoIncrement"`
+	Email      string `gorm:"unique"`
+	Password   string
 	CreateTime int64
 	UpdateTime int64
 }
