@@ -14,21 +14,25 @@ import (
 )
 
 func main() {
-	server := gin.Default()
 
-	db, err := gorm.Open(mysql.Open("root:root@tcp(localhost:13316)/webook"))
-	if err != nil {
-		panic(err)
-	}
-	ud := dao.NewUserDAO(db)
-	repo := repository.NewUserRepository(ud)
-	svc := service.NewUserService(repo)
-	user := web.NewUserHandler(svc)
+	db := initDB()
 
-	err = dao.InitTable(db)
+	user := initUser(db)
+
+	server := initWeb()
+
+	// 注册用户路由
+	user.RegisterRoutes(server)
+
+	err := server.Run(":8888")
 	if err != nil {
 		return
 	}
+}
+
+func initWeb() *gin.Engine {
+	server := gin.Default()
+
 	// 解决跨域问题
 	server.Use(cors.New(cors.Config{
 		AllowCredentials: true, // 是否允许使用cookie
@@ -41,12 +45,27 @@ func main() {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
+	return server
+}
 
-	// 注册用户路由
-	user.RegisterRoutes(server)
+func initUser(db *gorm.DB) *web.UserHandler {
+	ud := dao.NewUserDAO(db)
+	repo := repository.NewUserRepository(ud)
+	svc := service.NewUserService(repo)
+	user := web.NewUserHandler(svc)
 
-	err = server.Run(":8888")
+	err := dao.InitTable(db)
 	if err != nil {
-		return
+		panic
+		err
 	}
+	return user
+}
+
+func initDB() *gorm.DB {
+	db, err := gorm.Open(mysql.Open("root:root@tcp(localhost:13316)/webook"))
+	if err != nil {
+		panic(err)
+	}
+	return db
 }
