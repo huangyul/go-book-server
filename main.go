@@ -14,12 +14,11 @@ import (
 )
 
 func main() {
-
 	db := initDB()
 
-	user := initUser(db)
-
 	server := initWeb()
+
+	user := initUser(db)
 
 	// 注册用户路由
 	user.RegisterRoutes(server)
@@ -56,8 +55,7 @@ func initUser(db *gorm.DB) *web.UserHandler {
 
 	err := dao.InitTable(db)
 	if err != nil {
-		panic
-		err
+		panic(err)
 	}
 	return user
 }
