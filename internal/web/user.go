@@ -8,13 +8,17 @@ import (
 
 type UserHandler struct {
 	emailExp *regexp.Regexp
+	password *regexp.Regexp
 }
 
 func NewUserHandler() *UserHandler {
 	const emailReg = `^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$`
+	const passwordReg = ""
 	emailExp := regexp.MustCompile(emailReg, regexp.None)
+	passwordExp := regexp.MustCompile(passwordReg, regexp.None)
 	return &UserHandler{
 		emailExp: emailExp,
+		password: passwordExp,
 	}
 }
 
