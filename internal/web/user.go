@@ -3,15 +3,18 @@ package web
 import (
 	regexp "github.com/dlclark/regexp2"
 	"github.com/gin-gonic/gin"
+	"go-book-server/internal/domain"
+	"go-book-server/internal/service"
 	"net/http"
 )
 
 type UserHandler struct {
+	svc      *service.UserService
 	emailExp *regexp.Regexp
 	password *regexp.Regexp
 }
 
-func NewUserHandler() *UserHandler {
+func NewUserHandler(svc *service.UserService) *UserHandler {
 	const emailReg = `^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$`
 	const passwordReg = ""
 	emailExp := regexp.MustCompile(emailReg, regexp.None)
@@ -19,6 +22,7 @@ func NewUserHandler() *UserHandler {
 	return &UserHandler{
 		emailExp: emailExp,
 		password: passwordExp,
+		svc:      svc,
 	}
 }
 
@@ -60,6 +64,11 @@ func (u *UserHandler) SignUp(ctx *gin.Context) {
 	}
 
 	// 处理数据
+	err = u.svc.SignUp(ctx, domain.User{Email: req.Email, Password: req.Password})
+	if err != nil {
+		ctx.String(http.StatusOK, "系统错误")
+		return
+	}
 
 	// 返回响应
 	ctx.String(http.StatusOK, "注册成功")
