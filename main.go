@@ -3,13 +3,27 @@ package main
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"go-book-server/internal/repository"
+	"go-book-server/internal/repository/dao"
+	"go-book-server/internal/service"
 	"go-book-server/internal/web"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"strings"
 	"time"
 )
 
 func main() {
 	server := gin.Default()
+
+	db, err := gorm.Open(mysql.Open("root:root@tcp(localhost:13316)/webook"))
+	if err != nil {
+		panic(err)
+	}
+	ud := dao.NewUserDAO(db)
+	repo := repository.NewUserRepository(ud)
+	svc := service.NewUserService(repo)
+	user := web.NewUserHandler(svc)
 
 	// 解决跨域问题
 	server.Use(cors.New(cors.Config{
@@ -25,10 +39,9 @@ func main() {
 	}))
 
 	// 注册用户路由
-	user := web.NewUserHandler()
 	user.RegisterRoutes(server)
 
-	err := server.Run(":8888")
+	err = server.Run(":8888")
 	if err != nil {
 		return
 	}
