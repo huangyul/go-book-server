@@ -1,6 +1,7 @@
 package web
 
 import (
+	"errors"
 	regexp "github.com/dlclark/regexp2"
 	"github.com/gin-gonic/gin"
 	"go-book-server/internal/domain"
@@ -39,7 +40,7 @@ func (u *UserHandler) Profile(ctx *gin.Context) {}
 
 // SignUp 注册
 func (u *UserHandler) SignUp(ctx *gin.Context) {
-	// 1 获取数据
+	// 获取数据
 	type Req struct {
 		Email           string `json:"email,omitempty"`
 		Password        string `json:"password,omitempty"`
@@ -65,6 +66,12 @@ func (u *UserHandler) SignUp(ctx *gin.Context) {
 
 	// 处理数据
 	err = u.svc.SignUp(ctx, domain.User{Email: req.Email, Password: req.Password})
+
+	if errors.Is(err, service.ErrUserDuplicateEmail) {
+		ctx.String(http.StatusBadRequest, "邮箱冲突")
+		return
+	}
+
 	if err != nil {
 		ctx.String(http.StatusOK, "系统错误")
 		return
