@@ -59,6 +59,10 @@ func (u *UserHandler) SignUp(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "系统错误")
 		return
 	}
+	if req.ConfirmPassword != req.Password {
+		ctx.String(http.StatusOK, "两次输入的密码不一样")
+		return
+	}
 	if !ok {
 		ctx.String(http.StatusOK, "邮箱格式不正确")
 		return
@@ -82,7 +86,34 @@ func (u *UserHandler) SignUp(ctx *gin.Context) {
 }
 
 // Login 登录
-func (u *UserHandler) Login(ctx *gin.Context) {}
+func (u *UserHandler) Login(ctx *gin.Context) {
+	type LoginReq struct {
+		Email    string `json:"email,omitempty"`
+		Password string `json:"password,omitempty"`
+	}
+	var req LoginReq
+	if err := ctx.Bind(&req); err != nil {
+		return
+	}
+
+	// 查找用户
+	du := domain.User{
+		Email:    req.Email,
+		Password: req.Password,
+	}
+	_, err := u.svc.FindByEmail(ctx, du)
+	if errors.Is(err, service.ErrInvalidUserOrPassword) {
+		ctx.String(http.StatusOK, "用户名或密码不对")
+		return
+	}
+	if err != nil {
+		ctx.String(http.StatusOK, "系统错误")
+		return
+	}
+	// 登录成功
+	ctx.String(http.StatusOK, "登录成功")
+	return
+}
 
 // Edit 编辑
 func (u *UserHandler) Edit(ctx *gin.Context) {}
