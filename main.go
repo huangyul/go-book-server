@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"go-book-server/internal/repository"
 	"go-book-server/internal/repository/dao"
@@ -44,6 +46,10 @@ func initWeb() *gin.Engine {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
+
+	// 设置session
+	store := cookie.NewStore([]byte("secret"))
+	server.Use(sessions.Sessions("mysession", store))
 	return server
 }
 

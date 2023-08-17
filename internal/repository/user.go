@@ -29,6 +29,7 @@ func (r *UserRepository) Create(ctx context.Context, u domain.User) error {
 func (r *UserRepository) FindByEmail(ctx context.Context, u domain.User) (domain.User, error) {
 	user, err := r.dao.FindByEmail(ctx, u)
 	ud := domain.User{
+		ID:       user.Id,
 		Password: user.Password,
 		Email:    user.Email,
 	}
