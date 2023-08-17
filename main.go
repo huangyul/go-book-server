@@ -9,6 +9,7 @@ import (
 	"go-book-server/internal/repository/dao"
 	"go-book-server/internal/service"
 	"go-book-server/internal/web"
+	"go-book-server/internal/web/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
@@ -50,6 +51,10 @@ func initWeb() *gin.Engine {
 	// 设置session
 	store := cookie.NewStore([]byte("secret"))
 	server.Use(sessions.Sessions("mysession", store))
+
+	// session校验
+	server.Use(middleware.NewLoginMiddlewareBuilder().IgnorePaths("/users/signup").IgnorePaths("/users/login").Build())
+
 	return server
 }
 
