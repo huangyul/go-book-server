@@ -124,4 +124,6 @@ func (u *UserHandler) Login(ctx *gin.Context) {
 }
 
 // Edit 编辑
-func (u *UserHandler) Edit(ctx *gin.Context) {}
+func (u *UserHandler) Edit(ctx *gin.Context) {
+
+}
