@@ -5,4 +5,7 @@ type User struct {
 	ID       int64
 	Email    string
 	Password string
+	NickName string
+	Birthday string
+	Brief    string
 }

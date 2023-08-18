@@ -8,6 +8,7 @@ import (
 	"go-book-server/internal/domain"
 	"go-book-server/internal/service"
 	"net/http"
+	"strconv"
 )
 
 type UserHandler struct {
@@ -37,7 +38,19 @@ func (u *UserHandler) RegisterRoutes(server *gin.Engine) {
 }
 
 // Profile 获取用户信息
-func (u *UserHandler) Profile(ctx *gin.Context) {}
+func (u *UserHandler) Profile(ctx *gin.Context) {
+
+	id := ctx.Query("id")
+	intId, _ := strconv.ParseInt(id, 10, 64)
+	du := domain.User{ID: intId}
+	info, err := u.svc.GetUserInfoById(ctx, du)
+	if err != nil {
+		ctx.String(http.StatusInternalServerError, "服务器出错")
+		return
+	}
+	ctx.JSON(http.StatusOK, info)
+	return
+}
 
 // SignUp 注册
 func (u *UserHandler) SignUp(ctx *gin.Context) {
@@ -125,5 +138,29 @@ func (u *UserHandler) Login(ctx *gin.Context) {
 
 // Edit 编辑
 func (u *UserHandler) Edit(ctx *gin.Context) {
+	type EditReq struct {
+		Id       int64  `json:"id"`
+		NickName string `json:"nick_name"`
+		Birthday string `json:"birthday"`
+		Brief    string `json:"brief"`
+	}
+	var req EditReq
+	err := ctx.Bind(&req)
+	if err != nil {
+		return
+	}
 
+	du := domain.User{
+		ID:       req.Id,
+		NickName: req.NickName,
+		Birthday: req.Birthday,
+		Brief:    req.Brief,
+	}
+	err = u.svc.UpdateUserInfo(ctx, du)
+	if err != nil {
+		return
+	}
+
+	ctx.String(http.StatusOK, "更新成功")
+	return
 }

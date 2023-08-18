@@ -35,3 +35,12 @@ func (r *UserRepository) FindByEmail(ctx context.Context, u domain.User) (domain
 	}
 	return ud, err
 }
+
+func (r *UserRepository) UpdateUser(ctx context.Context, u domain.User) error {
+	err := r.dao.UpdateUserInfo(ctx, u)
+	return err
+}
+
+func (r *UserRepository) GetUserInfo(ctx context.Context, u domain.User) (domain.User, error) {
+	return r.dao.GetById(ctx, u)
+}

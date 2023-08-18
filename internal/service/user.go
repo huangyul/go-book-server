@@ -49,3 +49,11 @@ func (usc *UserService) FindByEmail(ctx context.Context, user domain.User) (doma
 	}
 	return u, nil
 }
+
+func (usc *UserService) UpdateUserInfo(ctx context.Context, user domain.User) error {
+	return usc.repo.UpdateUser(ctx, user)
+}
+
+func (usc *UserService) GetUserInfoById(ctx context.Context, user domain.User) (domain.User, error) {
+	return usc.repo.GetUserInfo(ctx, user)
+}
