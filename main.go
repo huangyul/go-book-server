@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"go-book-server/internal/repository"
 	"go-book-server/internal/repository/dao"
@@ -49,7 +49,13 @@ func initWeb() *gin.Engine {
 	}))
 
 	// 设置session
-	store := cookie.NewStore([]byte("secret"))
+	// 这里是使用cookie存储session
+	//store := cookie.NewStore([]byte("secret"))
+	// 使用redis存储,便于多实例
+	store, err := redis.NewStore(16, "tcp", "localhost:6379", "", []byte("pO8uY2tE6iK9zN4oT2wP3iP4mQ9vN6fC"), []byte("oU5yR0iC6zM9uF0gR3vX0iR0qL1hR1zA"))
+	if err != nil {
+		panic(err)
+	}
 	server.Use(sessions.Sessions("mysession", store))
 
 	// session校验
