@@ -35,6 +35,7 @@ func (u *UserHandler) RegisterRoutes(server *gin.Engine) {
 	ug.POST("/edit", u.Edit)
 	ug.POST("/login", u.Login)
 	ug.POST("/signup", u.SignUp)
+	ug.GET("/logout", u.Logout)
 }
 
 // Profile 获取用户信息
@@ -128,6 +129,11 @@ func (u *UserHandler) Login(ctx *gin.Context) {
 	// 设置session
 	sess := sessions.Default(ctx)
 	sess.Set("userId", user.ID)
+	sess.Options(sessions.Options{
+		//HttpOnly: true,
+		//Secure:   true,
+		//MaxAge: -1,
+	})
 	err = sess.Save()
 	if err != nil {
 		return
@@ -163,4 +169,16 @@ func (u *UserHandler) Edit(ctx *gin.Context) {
 
 	ctx.String(http.StatusOK, "更新成功")
 	return
+}
+
+func (u *UserHandler) Logout(ctx *gin.Context) {
+	sess := sessions.Default(ctx)
+	sess.Options(sessions.Options{
+		MaxAge: -1,
+	})
+	err := sess.Save()
+	if err != nil {
+		panic(err)
+	}
+	ctx.String(http.StatusOK, "登出成功")
 }
