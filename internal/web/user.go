@@ -132,7 +132,7 @@ func (u *UserHandler) Login(ctx *gin.Context) {
 	sess.Options(sessions.Options{
 		//HttpOnly: true,
 		//Secure:   true,
-		//MaxAge: -1,
+		MaxAge: 30 * 60,
 	})
 	err = sess.Save()
 	if err != nil {
