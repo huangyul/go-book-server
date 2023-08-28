@@ -59,7 +59,10 @@ func initWeb() *gin.Engine {
 	server.Use(sessions.Sessions("mysession", store))
 
 	// session校验
-	server.Use(middleware.NewLoginMiddlewareBuilder().IgnorePaths("/users/signup").IgnorePaths("/users/login").Build())
+	//server.Use(middleware.NewLoginMiddlewareBuilder().IgnorePaths("/users/signup").IgnorePaths("/users/login").Build())
+
+	// JWT校验
+	server.Use(middleware.NewLoginJWTMiddlewareBuild().IgnorePaths("/users/signup").IgnorePaths("/users/login").Build())
 
 	return server
 }
