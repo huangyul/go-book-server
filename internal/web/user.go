@@ -165,7 +165,10 @@ func (u *UserHandler) JWTLogin(ctx *gin.Context) {
 	}
 
 	// 设置token
-	token := jwt.New(jwt.SigningMethodHS512)
+	claim := &UserClaim{
+		uId: user.ID,
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claim)
 	tokenStr, err := token.SignedString([]byte("95osj3fUD7fo0mlYdDbncXz4VD2igvf0"))
 	if err != nil {
 		ctx.String(http.StatusInternalServerError, "系统错误")
@@ -219,4 +222,9 @@ func (u *UserHandler) Logout(ctx *gin.Context) {
 		panic(err)
 	}
 	ctx.String(http.StatusOK, "登出成功")
+}
+
+type UserClaim struct {
+	jwt.RegisteredClaims
+	uId int64
 }
