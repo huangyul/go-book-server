@@ -11,6 +11,7 @@ import (
 	"go-book-server/internal/service"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type UserHandler struct {
@@ -166,6 +167,10 @@ func (u *UserHandler) JWTLogin(ctx *gin.Context) {
 
 	// 设置token
 	claim := &UserClaim{
+		RegisteredClaims: jwt.RegisteredClaims{
+			// 过期时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		},
 		uId: user.ID,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claim)
