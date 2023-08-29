@@ -171,7 +171,8 @@ func (u *UserHandler) JWTLogin(ctx *gin.Context) {
 			// 过期时间
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		},
-		uId: user.ID,
+		UserAgent: ctx.Request.UserAgent(),
+		uId:       user.ID,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claim)
 	tokenStr, err := token.SignedString([]byte("95osj3fUD7fo0mlYdDbncXz4VD2igvf0"))
@@ -231,5 +232,6 @@ func (u *UserHandler) Logout(ctx *gin.Context) {
 
 type UserClaim struct {
 	jwt.RegisteredClaims
-	uId int64
+	uId       int64
+	UserAgent string
 }
