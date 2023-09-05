@@ -60,3 +60,37 @@ ENTRYPOINT ["/app/webook"]
 `docker build -t jojo/webook:v0.0.1`
 
 `-t`: 镜像的名字及标签，通常 name:tag 或者 name 格式
+
+### 启动k8s
+
+定义k8s文件
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webook
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webook
+  # 描述的是POD是什么样的
+  template:
+    metadata:
+      labels:
+        app: webook
+    # POD的具体信息
+    spec:
+      containers:
+        - name: webook
+          image: jojo/webook:v0.0.1
+```
+
+启动
+
+`kubectl.exe apply -f .\k8s-webook-deployment.yaml`
+
+查看是否启动成功
+
+`kubectl.exe get deployments`

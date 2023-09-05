@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webook
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webook
+  # 描述的是POD是什么样的
+  template:
+    metadata:
+      labels:
+        app: webook
+    # POD的具体信息
+    spec:
+      containers:
+        - name: webook
+          image: jojo/webook:v0.0.1
