@@ -36,3 +36,27 @@ go evn -w GOOS=linux
 go evn -w GOARCH=amd64
 go build main.go
 ```
+
+### 使用dockerfile打包成一个镜像
+
+定义dockerfile文件
+
+```dockerfile
+# 基础镜像
+FROM ubuntu:20.04
+
+# 复制到镜像里
+COPY webook /app
+
+# 设定工作目录
+WORKDIR /app
+
+# 入口执行
+ENTRYPOINT ["/app/webook"]
+```
+
+执行构建镜像命令
+
+`docker build -t jojo/webook:v0.0.1`
+
+`-t`: 镜像的名字及标签，通常 name:tag 或者 name 格式
