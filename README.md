@@ -18,3 +18,21 @@
 
 ## gorm
 
+## k8s
+
+### 先将项目打包成linux可执行文件
+
+windows下的命令
+
+```bash
+# windows 可执行文件
+go evn -w CGO_ENABLED=0
+go evn -w GOOS=darwin
+go evn -w GOARCH=amd64
+go build main.go
+# linux 可执行文件
+go evn -w CGO_ENABLED=0
+go evn -w GOOS=linux
+go evn -w GOARCH=amd64
+go build main.go
+```

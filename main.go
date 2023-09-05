@@ -12,20 +12,25 @@ import (
 	"go-book-server/internal/web/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"net/http"
 	"strings"
 	"time"
 )
 
 func main() {
-	db := initDB()
+	//db := initDB()
 
-	server := initWeb()
+	//server := initWeb()
 
-	user := initUser(db)
+	//user := initUser(db)
 
 	// 注册用户路由
-	user.RegisterRoutes(server)
+	//user.RegisterRoutes(server)
 
+	server := gin.Default()
+	server.GET("/hello", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "hello")
+	})
 	err := server.Run(":8888")
 	if err != nil {
 		return
