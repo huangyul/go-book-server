@@ -94,3 +94,4 @@ spec:
 查看是否启动成功
 
 `kubectl.exe get deployments`
+
