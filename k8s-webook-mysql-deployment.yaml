@@ -22,7 +22,16 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: root
+          volumeMounts:
+            - mountPath: /mysql
+              # 使用哪一个volume
+              name: mysql-storage
           ports:
             - containerPort: 3306
       restartPolicy: Always
+      # 声明有多少个volumes
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: webook-mysql-claim
       
