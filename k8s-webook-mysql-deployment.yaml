@@ -23,7 +23,9 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: root
           volumeMounts:
-            - mountPath: /mysql
+            # 要对应到mysql对应存储的位置
+            # 通过mysql配置可以修改这个
+            - mountPath: /var/lib/mysql
               # 使用哪一个volume
               name: mysql-storage
           ports:
