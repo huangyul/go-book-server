@@ -95,6 +95,9 @@ spec:
 
 `kubectl.exe get deployments`
 
-### k8s持久化
+### k8s持久化mysql
 
 在`deployment`中声明挂载的`volume`，通过`claimName`去匹配对应的`pvc`，然后在`pvc`通过`storageClassName`匹配`pv`
+
+### k8s部署redis
+
