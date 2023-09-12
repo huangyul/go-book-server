@@ -12,25 +12,20 @@ import (
 	"go-book-server/internal/web/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"net/http"
 	"strings"
 	"time"
 )
 
 func main() {
-	//db := initDB()
+	db := initDB()
 
-	//server := initWeb()
+	server := initWeb()
 
-	//user := initUser(db)
+	user := initUser(db)
 
 	// 注册用户路由
-	//user.RegisterRoutes(server)
+	user.RegisterRoutes(server)
 
-	server := gin.Default()
-	server.GET("/hello", func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "hello")
-	})
 	err := server.Run(":8888")
 	if err != nil {
 		return
@@ -57,7 +52,7 @@ func initWeb() *gin.Engine {
 	// 这里是使用cookie存储session
 	//store := cookie.NewStore([]byte("secret"))
 	// 使用redis存储,便于多实例
-	store, err := redis.NewStore(16, "tcp", "localhost:6379", "", []byte("pO8uY2tE6iK9zN4oT2wP3iP4mQ9vN6fC"), []byte("oU5yR0iC6zM9uF0gR3vX0iR0qL1hR1zA"))
+	store, err := redis.NewStore(16, "tcp", "webook-redis:11379", "", []byte("pO8uY2tE6iK9zN4oT2wP3iP4mQ9vN6fC"), []byte("oU5yR0iC6zM9uF0gR3vX0iR0qL1hR1zA"))
 	if err != nil {
 		panic(err)
 	}
@@ -86,7 +81,7 @@ func initUser(db *gorm.DB) *web.UserHandler {
 }
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open(mysql.Open("root:root@tcp(localhost:13316)/webook"))
+	db, err := gorm.Open(mysql.Open("root:root@tcp(webook-mysql:11309)/webook"))
 	if err != nil {
 		panic(err)
 	}

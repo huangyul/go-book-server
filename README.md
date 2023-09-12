@@ -57,7 +57,7 @@ ENTRYPOINT ["/app/webook"]
 
 执行构建镜像命令
 
-`docker build -t jojo/webook:v0.0.1`
+`docker build -t jojo/webook:v0.0.1 .`
 
 `-t`: 镜像的名字及标签，通常 name:tag 或者 name 格式
 
@@ -101,3 +101,9 @@ spec:
 
 ### k8s部署redis
 
+### k8s部署nginx
+
+- Ingress 是路由规则
+- Ingress controller控制这些规则，执行这些配置
+
+类似与`Ingress`是配置，`Ingress controller`是执行器
