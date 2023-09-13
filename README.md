@@ -107,3 +107,7 @@ spec:
 - Ingress controller控制这些规则，执行这些配置
 
 类似与`Ingress`是配置，`Ingress controller`是执行器
+
+## 性能测试
+
+wrk

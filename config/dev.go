@@ -2,7 +2,7 @@ package config
 
 var Config = WebookConfig{
 	DB: DBConfig{
-		DSB: "root:root@tcp(webook-mysql:13316)/webook",
+		DSB: "root:root@tcp(localhost:13316)/webook",
 	},
 	Redis: RedisConfig{
 		Addr: "localhost:6379",
