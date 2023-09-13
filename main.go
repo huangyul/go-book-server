@@ -5,6 +5,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
+	"go-book-server/config"
 	"go-book-server/internal/repository"
 	"go-book-server/internal/repository/dao"
 	"go-book-server/internal/service"
@@ -52,7 +53,7 @@ func initWeb() *gin.Engine {
 	// 这里是使用cookie存储session
 	//store := cookie.NewStore([]byte("secret"))
 	// 使用redis存储,便于多实例
-	store, err := redis.NewStore(16, "tcp", "webook-redis:11379", "", []byte("pO8uY2tE6iK9zN4oT2wP3iP4mQ9vN6fC"), []byte("oU5yR0iC6zM9uF0gR3vX0iR0qL1hR1zA"))
+	store, err := redis.NewStore(16, "tcp", config.Config.Redis.Addr, "", []byte("pO8uY2tE6iK9zN4oT2wP3iP4mQ9vN6fC"), []byte("oU5yR0iC6zM9uF0gR3vX0iR0qL1hR1zA"))
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +82,7 @@ func initUser(db *gorm.DB) *web.UserHandler {
 }
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open(mysql.Open("root:root@tcp(webook-mysql:11309)/webook"))
+	db, err := gorm.Open(mysql.Open(config.Config.DB.DSB))
 	if err != nil {
 		panic(err)
 	}
