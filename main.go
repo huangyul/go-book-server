@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-book-server/config"
 	"go-book-server/internal/repository"
+	"go-book-server/internal/repository/cache"
 	"go-book-server/internal/repository/dao"
 	"go-book-server/internal/service"
 	"go-book-server/internal/web"
@@ -68,9 +69,9 @@ func initWeb() *gin.Engine {
 	return server
 }
 
-func initUser(db *gorm.DB) *web.UserHandler {
+func initUser(db *gorm.DB, cache *cache.UserCache) *web.UserHandler {
 	ud := dao.NewUserDAO(db)
-	repo := repository.NewUserRepository(ud)
+	repo := repository.NewUserRepository(ud, cache)
 	svc := service.NewUserService(repo)
 	user := web.NewUserHandler(svc)
 

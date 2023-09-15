@@ -58,6 +58,12 @@ func (dao *UserDAO) GetById(ctx context.Context, user domain.User) (domain.User,
 	return u, err
 }
 
+func (dao *UserDAO) FindById(ctx context.Context, id int64) (User, error) {
+	var u User
+	err := dao.db.WithContext(ctx).Where(`id = ?`, id).First(&u).Error
+	return u, err
+}
+
 // User 数据库表结构
 type User struct {
 	Id         int64  `gorm:"primaryKey,autoIncrement" json:"id,omitempty"`

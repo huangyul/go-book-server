@@ -2,22 +2,17 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"github.com/redis/go-redis/v9"
 	"go-book-server/internal/domain"
 	"go-book-server/internal/repository"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 var ErrUserDuplicateEmail = repository.ErrUserDuplicateEmail
 var ErrInvalidUserOrPassword = errors.New("用户/邮箱或密码不对")
 
 type UserService struct {
-	repo  *repository.UserRepository
-	redis *redis.Client
+	repo *repository.UserRepository
 }
 
 func NewUserService(repo *repository.UserRepository) *UserService {
@@ -36,13 +31,6 @@ func (usc *UserService) SignUp(ctx context.Context, user domain.User) error {
 	user.Password = string(hash)
 	err = usc.repo.Create(ctx, user)
 
-	if err != nil {
-		return err
-	}
-
-	// 将用户信息存起来
-	val, err := json.Marshal(user)
-	err = usc.redis.Set(ctx, fmt.Sprintf(`user:info:%d`, user.ID), val, time.Minute*30)
 	return err
 }
 
@@ -72,9 +60,6 @@ func (usc *UserService) GetUserInfoById(ctx context.Context, user domain.User) (
 	return usc.repo.GetUserInfo(ctx, user)
 }
 
-func (usc *UserService) profile(ctx context.Context, user domain.User) (domain.User, err) {
-	val, err := usc.redis.Get(ctx, fmt.Sprintf(`user:info:%d`, user.ID)).Result()
-	if err != nil {
-		return domain.User{}, err
-	}
+func (usc *UserService) profile(ctx context.Context, id int64) (domain.User, err) {
+	return usc.profile(ctx, id)
 }

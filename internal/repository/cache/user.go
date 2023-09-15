@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var ErrUserNotFound = redis.Nil
+
 type UserCache struct {
 	client     redis.Cmdable
 	expiration time.Duration
@@ -27,6 +29,7 @@ func (c *UserCache) Get(ctx context.Context, id int64) (domain.User, error) {
 	key := c.key(id)
 	val, err := c.client.Get(ctx, key).Bytes()
 	if err != nil {
+		// 没有数据，会返回redis.Nil
 		return domain.User{}, nil
 	}
 	var u domain.User
